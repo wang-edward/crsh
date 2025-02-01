@@ -60,6 +60,7 @@ int main(void) {
             if (waitpid(pid, &status, 0) == -1) {
                 perror("waitpid");
             }
+            printf("return code: %d\n", status);
         }
     }
 
