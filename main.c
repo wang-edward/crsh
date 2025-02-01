@@ -24,9 +24,15 @@ int main(void) {
         printf("root@crsh $ ");
         fflush(stdout);
 
-        if (getline(&line, &bufsize, stdin) == -1) {
-            perror("getline");
-            break;
+        ssize_t nread = getline(&line, &bufsize, stdin);
+        if (nread == -1) {
+            // EOF
+            if (feof(stdin)) {
+                break;
+            } else {
+                perror("getline");
+                break;
+            }
         }
 
         // clean newline
