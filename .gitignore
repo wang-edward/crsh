@@ -54,3 +54,4 @@ dkms.conf
 # executable
 a.*
 bin/
+crsh
