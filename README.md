@@ -6,7 +6,7 @@ crsh is unix shell that disinventicizes making mistakes.
 ## Usage
 ```bash
 make
-./crsh
+sudo ./crsh
 
 # examples
 root@crsh $ ls
