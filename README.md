@@ -10,8 +10,8 @@ sudo ./crsh
 
 # examples
 root@crsh $ ls
-root@crsh $ ./bin/print
 root@crsh $ ./bin/fizzbuzz
 root@crsh $ ./bin/factorial
+root@crsh $ vi THIS_IS_COOL.txt
 root@crsh $ cat notafile # what happens?????
 ```
