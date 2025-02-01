@@ -1,7 +1,10 @@
+#include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
+
 #include <sys/wait.h>
 
 #define MAX_ARGS 100
@@ -60,7 +63,18 @@ int main(void) {
             if (waitpid(pid, &status, 0) == -1) {
                 perror("waitpid");
             }
-            printf("return code: %d\n", status);
+
+            // parse return code
+            if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
+                int ret = system("shutdown -h now");
+                if (ret == -1) {
+                    perror("system");
+                    return 1;
+                }
+            } else {
+                printf("child terminated abnormally\n");
+                assert(false);
+            }
         }
     }
 
