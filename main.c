@@ -4,8 +4,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
 #include <sys/wait.h>
+
+#ifdef __linux__
+    #define SHUTDOWN_CMD "shutdown -h now"
+#elif defined(__APPLE__)
+    #define SHUTDOWN_CMD "shutdown -h now"
+#else
+    #error "Unsupported OS"
+#endif
 
 #define MAX_ARGS 100
 
@@ -22,14 +29,15 @@ int main(void) {
             break;
         }
 
-        // remove trailing newlin
+        // clean newline
         line[strcspn(line, "\n")] = '\0';
 
+        // skip empty lines
         if (strlen(line) == 0) {
             continue;
         }
 
-        // parse
+        // tokenize
         char *args[MAX_ARGS];
         int arg_count = 0;
         char *token = strtok(line, " ");
@@ -52,25 +60,26 @@ int main(void) {
         }
 
         if (pid == 0) {
-            // within child process
+            // child
             if (execvp(args[0], args) == -1) {
                 perror("execvp");
             }
             exit(EXIT_FAILURE);
         } else {
-            // within parent
+            // parent
             int status;
             if (waitpid(pid, &status, 0) == -1) {
                 perror("waitpid");
             }
 
-            // parse return code
             if (!WIFEXITED(status)) {
                 printf("child terminated abnormally\n");
                 return 1;
             }
+
+            // shutdown if $? != 0
             if (WEXITSTATUS(status) != 0) {
-                int ret = system("shutdown -h now");
+                int ret = system(SHUTDOWN_CMD);
                 if (ret == -1) {
                     perror("system");
                     return 1;
