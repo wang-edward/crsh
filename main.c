@@ -21,7 +21,7 @@ int main(void) {
     size_t bufsize = 0;
 
     while (1) {
-        printf("$ ");
+        printf("root@crsh $ ");
         fflush(stdout);
 
         if (getline(&line, &bufsize, stdin) == -1) {
