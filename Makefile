@@ -1,27 +1,26 @@
-# Compiler and flags
-CC := clang
+CC := gcc
 CFLAGS := -Wall -Wextra -O2
 
-# Files and directories
-SHELL_BIN := shell
+SHELL_BIN := crsh
 MAIN_SRC := main.c
 EXAMPLES_DIR := examples
-EXAMPLES_SRC := $(wildcard $(EXAMPLES_DIR)/*.c)
-EXAMPLES_BINS := $(patsubst $(EXAMPLES_DIR)/%.c, a.%, $(EXAMPLES_SRC))
+BIN_DIR := bin
 
-# Default target builds both the shell and all examples
+EXAMPLES_SRC := $(wildcard $(EXAMPLES_DIR)/*.c)
+EXAMPLES_BINS := $(patsubst $(EXAMPLES_DIR)/%.c, $(BIN_DIR)/%, $(EXAMPLES_SRC))
+
 all: $(SHELL_BIN) $(EXAMPLES_BINS)
 
-# Build the main shell binary from main.c
 $(SHELL_BIN): $(MAIN_SRC)
 	$(CC) $(CFLAGS) -o $@ $^
 
-# Build each example binary from its corresponding .c file in examples/
-a.%: $(EXAMPLES_DIR)/%.c
+$(BIN_DIR)/%: $(EXAMPLES_DIR)/%.c | $(BIN_DIR)
 	$(CC) $(CFLAGS) -o $@ $<
 
-# Clean up generated binaries
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+
 clean:
-	rm -f $(SHELL_BIN) a.*
+	rm -f $(SHELL_BIN) $(BIN_DIR)/*
 
 .PHONY: all clean
