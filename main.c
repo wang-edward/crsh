@@ -65,15 +65,17 @@ int main(void) {
             }
 
             // parse return code
-            if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
+            if (!WIFEXITED(status)) {
+                printf("child terminated abnormally\n");
+                return 1;
+            }
+            if (WEXITSTATUS(status) != 0) {
                 int ret = system("shutdown -h now");
                 if (ret == -1) {
                     perror("system");
                     return 1;
                 }
-            } else {
-                printf("child terminated abnormally\n");
-                assert(false);
+                printf("SHUTDOWN\n");
             }
         }
     }
