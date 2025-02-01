@@ -1,8 +1,7 @@
 # crsh
 
 crsh is unix shell that disinventicizes making mistakes.
-
-when a program returns a non-zero error code, the computer will shut down.
+- when a program returns a non-zero error code, the computer will shut down.
 
 ## Usage
 ```bash
