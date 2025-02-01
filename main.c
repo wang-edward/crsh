@@ -90,7 +90,6 @@ int main(void) {
                     perror("system");
                     return 1;
                 }
-                printf("SHUTDOWN\n");
             }
         }
     }
